@@ -1,0 +1,34 @@
+server:
+  port: 8081 # Use a different port than your main backend (e.g., 8080)
+
+# 1. RabbitMQ (AMQP) Configuration
+spring:
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost} # Use environment variable or localhost default
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASS:guest}
+    listener:
+      simple:
+        # Crucial for message processing performance and stability
+        concurrency: 2 # Minimum concurrent consumers
+        max-concurrency: 5 # Maximum concurrent consumers
+
+# 2. Email Service Configuration (Example using a generic SMTP/Gmail)
+  mail:
+    host: mailhog # Docker service name
+    port: 1025
+    username: ""
+    password: ""
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+# 3. Application Logging (Optional)
+logging:
+  level:
+    com.internplat: INFO
+    org.springframework.amqp: WARN # Keep RabbitMQ logging quiet

@@ -28,6 +28,7 @@ The Notification Service operates on an **Event-Driven Architecture (EDA)**.
   * **Messaging:** Spring AMQP / RabbitMQ
   * **Templating:** Thymeleaf
   * **Build Tool:** Maven
+  * **Configuration:** Environment variables (RABBITMQ_HOST, etc.) matching application.yml conventions.
 
 ## 4\. Getting Started
 
@@ -39,64 +40,16 @@ You must have the following running locally:
   * **Maven**
   * **Docker** (to run the message broker and mail server locally)
 
-### Local Setup
+## 5. Docker Support
 
-1.  **Clone the Repository:**
-
-    ```bash
-    git clone https://github.com/your-org/notification-service-repo.git
-    cd notification-service-repo
-    ```
-
-2.  **Start Dependencies (RabbitMQ & MailHog)**
-    We recommend using **Docker Compose** to run local dependencies for development. This example uses **MailHog**—a fake SMTP server that catches emails without actually sending them, perfect for testing.
-
-    *Create a `docker-compose.yml` file with RabbitMQ and MailHog services.*
-
-    ```bash
-    docker compose up -d
-    ```
-
-    > You can view intercepted emails at: `http://localhost:8025`
-
-3.  **Configure Application**
-    Update the `src/main/resources/application.yml` file with your specific credentials, or ensure the required environment variables are set.
-
-4.  **Run the Service**
-
-    ```bash
-    mvn spring-boot:run
-    ```
-
-## 5\. Key Configuration Details
-
-| Config Property | Description | Default Local Value |
-| :--- | :--- | :--- |
-| `spring.rabbitmq.host` | Hostname of the message broker. | `localhost` |
-| `spring.mail.host` | Hostname of the SMTP server. | `localhost` (MailHog) |
-| `server.port` | The port this service runs on. | `8081` |
-
-### Message Queues
-
-This service consumes messages from the following queues, which are defined in `RabbitMQConfig.java`:
-
-  * `application.events.queue`: Handles accepted/rejected status updates.
-  * `marketing.events.queue`: Handles newsletter or bulk communications.
-
-## 6\. Testing
-
-### Unit Tests
-
-Run isolated tests on the `MailService` and message parsing logic using Mockito:
+To run the application along with its RabbitMQ dependency using Docker Compose:
 
 ```bash
-mvn test
+docker-compose up --build
 ```
 
-### Integration Tests
+The application will be available at `http://localhost:8081` and RabbitMQ management console at `http://localhost:15672`.
 
-Use **Testcontainers** (highly recommended) to run tests against a temporary, real RabbitMQ instance and verify message consumption:
+## 6. Testing
 
-```bash
-mvn clean install
-```
+Read WALKTHROUGH.md for more information on how to test the application.
