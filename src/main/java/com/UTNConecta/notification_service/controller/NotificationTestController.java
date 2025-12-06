@@ -1,7 +1,7 @@
 package com.UTNConecta.notification_service.controller;
 
-import com.UTNConecta.notification_service.config.RabbitMQConfig;
-import com.UTNConecta.notification_service.dto.NotificationRequest;
+import com.UTNConecta.amqp_commons.config.RabbitMQConstants;
+import com.UTNConecta.amqp_commons.dto.NotificationRequest;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +19,8 @@ public class NotificationTestController {
     @PostMapping("/publish")
     public String publishNotification(@RequestBody NotificationRequest request) {
         rabbitTemplate.convertAndSend(
-                RabbitMQConfig.EXCHANGE,
-                RabbitMQConfig.ROUTING_KEY,
+                RabbitMQConstants.INTERNAL_EXCHANGE,
+                RabbitMQConstants.INTERNAL_NOTIFICATION_ROUTING_KEY,
                 request);
         return "Message published to RabbitMQ!";
     }

@@ -1,5 +1,6 @@
 package com.UTNConecta.notification_service.config;
 
+import com.UTNConecta.amqp_commons.config.RabbitMQConstants;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -12,26 +13,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String QUEUE = "notification.queue";
-    public static final String EXCHANGE = "internal.exchange";
-    public static final String ROUTING_KEY = "internal.notification.routing-key";
-
     @Bean
     public TopicExchange internalExchange() {
-        return new TopicExchange(EXCHANGE);
+        return new TopicExchange(RabbitMQConstants.INTERNAL_EXCHANGE);
     }
 
     @Bean
     public Queue notificationQueue() {
-        return new Queue(QUEUE);
+        return new Queue(RabbitMQConstants.NOTIFICATION_QUEUE);
     }
 
     @Bean
-    public Binding binding() {
+    public Binding internalToNotificationBinding() {
         return BindingBuilder
                 .bind(notificationQueue())
                 .to(internalExchange())
-                .with(ROUTING_KEY);
+                .with(RabbitMQConstants.INTERNAL_NOTIFICATION_ROUTING_KEY);
     }
 
     @Bean
