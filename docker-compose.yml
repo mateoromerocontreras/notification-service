@@ -12,15 +12,15 @@ services:
       - rabbitmq
       - mailhog
     networks:
-      - app-network
+      - pasantias-network
 
   mailhog:
     image: mailhog/mailhog
     ports:
-      - "1025:1025"
-      - "8025:8025"
+      - "1026:1025"
+      - "8026:8025"
     networks:
-      - app-network
+      - pasantias-network
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -31,8 +31,9 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
     networks:
-      - app-network
+      - pasantias-network
 
 networks:
-  app-network:
-    driver: bridge
+  pasantias-network:
+    external: true
+    name: script_bd_pasantias-network
